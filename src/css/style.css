@@ -1,0 +1,25 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.sort-table {
+  border-collapse: collapse;
+  min-width: 400px;
+}
+
+.sort-table th,
+.sort-table td {
+  border: 1px solid #e0e0e0;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.sort-table th {
+  background-color: #fff;
+  font-weight: normal;
+}
+
+.sort-table tr:hover {
+  background-color: #f9f9f9;
+}

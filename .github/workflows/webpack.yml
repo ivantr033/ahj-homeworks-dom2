@@ -1,0 +1,49 @@
+name: Table Sorter
+
+on:
+  push:
+    branches: [ main, master ] # Se dispara al subir cambios a estas ramas
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descargar el código de tu repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Configurar Node.js (Usamos la caché de npm para ir más rápido)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      # 3. Instalación limpia de dependencias (el equivalente a npm install en CI)
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Validar el código con ESLint
+      - name: Run Linter
+        run: npm run lint
+        # Si tu script de eslint en el package.json se llama diferente (ej. "lint": "eslint ."), asegúrate de que coincida
+
+      # 5. Ejecutar los tests unitarios (Jest)
+      - name: Run Tests
+        run: npm test
+
+      # 6. Compilar el juego con Webpack para producción
+      - name: Build production package
+        run: npm run build
+        # Esto generará la carpeta 'dist/' con las imágenes empaquetadas mediante Asset Modules
+
+      # 7. Desplegar de forma automática a GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist # La carpeta que genera Webpack con el juego compilado
+          branch: gh-pages # La rama donde GitHub Pages leerá el sitio web
